@@ -56,6 +56,10 @@ function gameOverKillScreen () {
     pause(100)
     game.over(false, effects.splatter)
 }
+// Enemy collision detection
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprite.vx = sprite.x - otherSprite.x
+})
 function hoppla () {
     if (kvekk.isHittingTile(CollisionDirection.Bottom) && ikkeDau == true) {
         kvekk.vy = -230
@@ -64,6 +68,7 @@ function hoppla () {
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
     gameOverKillScreen()
 })
+let numberOfEnemies = 0
 let decoratio: Sprite = null
 let ikkeDau = false
 let baboom: Sprite = null
@@ -133,7 +138,7 @@ for (let value of tiles.getTilesByType(myTiles.tile1)) {
 }
 let enemyList = sprites.allOfKind(SpriteKind.Enemy)
 ikkeDau = true
-game.onUpdateInterval(1000, function () {
+game.onUpdateInterval(800, function () {
     for (let value of enemyList) {
         if (value.isHittingTile(CollisionDirection.Left) || value.isHittingTile(CollisionDirection.Right)) {
             value.vy = -150
@@ -141,6 +146,7 @@ game.onUpdateInterval(1000, function () {
     }
 })
 game.onUpdateInterval(100, function () {
+    numberOfEnemies = enemyList.length
     for (let value2 of enemyList) {
         value2.vx = kvekk.x - value2.x
     }
